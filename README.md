@@ -4,9 +4,7 @@ A web application which manages batch image generation via the ComfyUI API and w
 ## Demo⚡️
 Here's a simple demo on how to run multiple image generations with the tool. Run once, and leave it for later.
 
-<p align="center">
-<img src="https://huggingface.co/spaces/rsandagon/comfyui-batch-image-generation/resolve/main/demo.gif" width="512" height="256">
-</p>
+![](https://huggingface.co/spaces/rsandagon/comfyui-batch-image-generation/resolve/main/demo.gif)
 
 ## Usage
 1. Click the `Add Prompt` button. This will display the workflow editor.
