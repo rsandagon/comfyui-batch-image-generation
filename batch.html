@@ -1,0 +1,171 @@
+<html>
+<head>
+<script src="app.js"></script>
+<title>Batch Image Generation Manager</title>
+</head>
+<body onload="initializeApp()">
+    
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Specify a custom Tailwind configuration -->
+<script type="tailwind-config">
+{
+  theme: {
+    extend: {
+      colors: {
+        gray: colors.blueGray,
+      }
+    }
+  }
+}
+</script>
+
+<!-- Snippet -->
+<section class="flex flex-col justify-center antialiased bg-gray-50 text-gray-600 min-h-screen p-4 bg-[url('img/bg2.jpg')] bg-cover" style="background-image: url('img/bg2.jpg');">
+    <div class="h-full">
+        <!--- Modal -->
+        <div id="imgModal" aria-hidden="true" class="hidden overflow-x-hidden overflow-y-auto fixed bg-gray-100 bg-opacity-80 top=0 left-0 right-0 inset-0 z-50 justify-center items-center">
+            <div class="relative w-full max-w-full px-4 mx-auto md:h-auto">
+                <!-- Modal content -->
+                <div class="flex flex-col bg-white rounded-lg shadow m-4">
+                    <!-- Modal header -->
+                    <div class="h-auto flex items-start justify-between p-5 border-b rounded-t">
+                        <button onclick="closeImgModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="default-modal">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="-m-1 flex flex-wrap md:-m-2">
+                        <div class="flex w-full flex-wrap">
+                        <div id="imgContainer" class="w-full p-1 md:p-2">
+                            <img
+                            alt="gallery"
+                            class="block h-full w-full rounded-lg object-cover object-center"
+                            src="/img/bg2.jpg" />
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--- Modal -->
+        <div id="defaultModal" aria-hidden="true" class="hidden overflow-x-hidden overflow-y-auto fixed bg-gray-100 bg-opacity-80 top=0 left-0 right-0 inset-0 z-50 justify-center items-center">
+            <div class="relative w-full max-w-full px-4 mx-auto md:h-auto">
+                <!-- Modal content -->
+                <div class="flex flex-col bg-white rounded-lg shadow m-4">
+                    <!-- Modal header -->
+                    <div class="h-auto flex items-start justify-between p-5 border-b rounded-t">
+                        <div class="flex flex-col">
+                            <h3 id="workflowTitle" class="text-gray-900 text-xl lg:text-2xl font-semibold">
+                                API Format Workflow
+                            </h3>
+                            
+                            <div class="flex items-center p-4 mt-4 text-sm text-blue-800 rounded-lg bg-blue-50" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                To download the API format workflow in ComfyUI, simply click the <span class="font-medium">Enable Dev mode Options</span> from the gear settings.
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="default-modal">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="grow p-6 space-y-6">
+                        <div class="w-full min-w-[200px]">
+                            <textarea id="workflowTxtArea" rows="4" class="block w-full h-[500px]  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Write your api format workflow here..."></textarea>
+                          </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="h-auto flex-none flex space-x-2 items-center p-6 border-t border-gray-200 rounded-b">
+                        <button onclick="saveItem()" data-modal-toggle="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save Workflow</button>
+                        <button onclick="closeModal()" data-modal-toggle="default-modal" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-gray-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card -->
+        <div class="relative max-w-[1024px] mx-auto bg-white shadow-lg rounded-lg">
+            <!-- Card header -->
+            <header class="pt-6 pb-4 px-5 border-b border-gray-200">
+                <div class="flex justify-between items-center mb-3">
+                    <!-- Image + name -->
+                    <div class="flex items-center">
+                        <a class="inline-flex items-start mr-3" href="#0">
+                            <img class="rounded-lg w-16 h-16" src="img/logo.jpg" alt="logo"/>
+                        </a>
+                        <div class="pr-1">
+                            <a class="inline-flex text-gray-800 hover:text-gray-900" href="#0">
+                                <h2 class="text-xl leading-snug font-bold">Batch Image Generation Manager</h2>
+                            </a>
+                            <a class="block text-sm font-medium hover:text-indigo-500" href="#0">Supported by ComfyUI server</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center" id="connectBtnContainer">
+                        <button onclick="connectToWS()" class="right-5 inline-flex items-center text-sm font-medium text-white bg-green-500 hover:bg-green-600 rounded-full text-center px-3 py-2 shadow-lg focus:outline-none focus-visible:ring-2" id="connectBtn">
+                            <svg class="w-3 h-3 fill-current text-green-300 flex-shrink-0 mr-2" height="16" width="12" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M96 0C78.3 0 64 14.3 64 32v96h64V32c0-17.7-14.3-32-32-32zM288 0c-17.7 0-32 14.3-32 32v96h64V32c0-17.7-14.3-32-32-32zM32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32v32c0 77.4 55 142 128 156.8V480c0 17.7 14.3 32 32 32s32-14.3 32-32V412.8C297 398 352 333.4 352 256V224c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"/></svg>
+                            <span>Connect</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Meta -->
+            </header>
+            <!-- Card body -->
+            
+            <div class="py-3 px-5">
+                <!-- Prompt list -->
+                <div class="flex items-center mb-3">
+                    <div class="flex items-start justify-between">
+
+                    <button onclick="setNewActiveIndex();openModal()" class="ml-1 right-1 inline-flex items-center text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 rounded-lg text-center px-2 py-2 shadow-lg focus:outline-none focus-visible:ring-2">
+                        <svg class="w-6 h-6 fill-current text-white-300 flex-shrink-0 mr-2" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                        <span class="text-l">Add Prompt</span>
+                      </button>
+                </div>
+            </div>
+                
+                <div class="divide-y divide-gray-200 ">
+                    <ul id="notifContainer" role="list" class="divide-y divide-gray-200">
+                        <!-- <li class="flex p-6">
+                          <div class="ml-4 flex flex-1 flex-col">
+                            <div>
+                              <div class="flex text-base font-medium text-gray-900">
+                                <h2>
+                                  <a href="#">Image Generation</a>
+                                </h2>
+                              </div>
+                              <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                            </div>
+                            <div class="flex flex-row-reverse items-end justify-between text-sm">    
+                              <div class="flex">
+                                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                              </div>
+                            </div>
+                          </div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+            <footer class="pt-6 pb-4 px-5 border-t border-gray-200">
+                <div id="footerBtn" class="hidden flex flex-row-reverse items-center mb-3">
+                    <button onclick="runQueues()" class="ml-1 right-5 inline-flex items-center text-sm font-medium text-white bg-green-500 hover:bg-green-600 rounded-lg text-center px-3 py-2 shadow-lg focus:outline-none focus-visible:ring-2">
+                        <span>Run All</span>
+                    </button>
+                    <button onclick="continueQueues()" class="ml-1 right-5 inline-flex items-center text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded-lg text-center px-3 py-2 shadow-lg focus:outline-none focus-visible:ring-2">
+                        <span>Continue</span>
+                    </button>
+                    <button onclick="pauseQueues()" class="ml-1 right-5 inline-flex items-center text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg text-center px-3 py-2 shadow-lg focus:outline-none focus-visible:ring-2">
+                        <span>Pause</span>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+</section>
+</body>
+</html>
