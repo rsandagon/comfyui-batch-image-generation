@@ -1,5 +1,6 @@
 # Comfyui Batch Image Generation
 A web application which manages batch image generation via the ComfyUI API and websocket interfaces.🤖
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S613677)
 
 ## Demo⚡️
